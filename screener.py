@@ -11,13 +11,7 @@ def readfile(filename):
     for d in data:
         if d[0] not in ticker_dictionary:
             ticker_dictionary[d[0]] = []
-
-        #high : d[3]
-        #low : d[4]
-        #close : d[5]
-        #ascending dates
         ticker_dictionary[d[0]].append([d[3], d[4], d[5]])
-
     return ticker_dictionary
 
 
@@ -41,12 +35,10 @@ def avg(hh, ll):
 
 
 def is_valid(d, ticker, days=26):
-
     if len(d[ticker]) != 84:
         return False
     
     mainday = len(d[ticker]) - days - 1
-    
     hh9 = highest_high(d, ticker, mainday, 9)
     ll9 = lowest_low(d, ticker, mainday, 9)
     hh26 = highest_high(d, ticker, mainday, 26)
@@ -61,25 +53,6 @@ def is_valid(d, ticker, days=26):
     senkoub = avg(hh52, ll52)
     close = float(d[ticker][mainday][2])
     prev_close = float(d[ticker][mainday - 1][2])
-
-
-
-    '''
-    print hh9
-    print ll9
-    print hh26
-    print ll26
-    print hh52
-    print ll52
-    print tenkansen
-    print kijunsen
-    print chikouspan
-    print senkoua
-    print senkoub
-    print close
-    print chikouspan >= close
-    '''
-
     
     
     if (close > senkoua and
@@ -87,13 +60,11 @@ def is_valid(d, ticker, days=26):
         chikouspan >= close and
         prev_chikouspan < prev_close):
         return True
-
     if (close < senkoua and
         close < senkoub and
         chikouspan <= close and
         prev_chikouspan > prev_close):
         return True
-
     return False
         
 def get_valid_tickers(d):
@@ -104,8 +75,7 @@ def get_valid_tickers(d):
     return valid_tickers
             
     
-d = readfile("sampledata/WIKI_PRICES_010158fe7c92b40ebea4a642c5d0b158.csv")
-#print(is_valid(d, "HIVE"))
+d = readfile("datafortoday.csv")
 print(get_valid_tickers(d))
 
 
