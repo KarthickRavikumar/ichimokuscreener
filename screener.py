@@ -24,12 +24,12 @@ def readfile(filename):
 def highest_high(d, ticker, start, days):
     if start < days - 1:
         raise IndexError("Highest high start is out of bounds")
-    return max([float(x[0]) for x in d[ticker][start - days:start + 1]])
+    return max([float(x[0]) for x in d[ticker][start + 1 - days:start + 1]])
 
 def lowest_low(d, ticker, start, days):
     if start < days - 1:
         raise IndexError("Lowest low start is out of bounds")
-    return min([float(x[1]) for x in d[ticker][start - days:start + 1]])
+    return min([float(x[1]) for x in d[ticker][start + 1 - days:start + 1]])
 
 def chikou(d, ticker, start, days=26):
     if start > len(d[ticker]) - days:
@@ -61,7 +61,7 @@ def is_valid(d, ticker, days=26):
     senkoub = avg(hh52, ll52)
 
 
-    '''
+
     print hh9
     print ll9
     print hh26
@@ -73,7 +73,7 @@ def is_valid(d, ticker, days=26):
     print chikouspan
     print senkoua
     print senkoub
-    '''
+
 
     close = d[ticker][mainday][2]
     prev_close = d[ticker][mainday - 1][2]
@@ -89,13 +89,10 @@ def is_valid(d, ticker, days=26):
         close < senkoub and
         chikouspan <= close and
         prev_chikouspan > prev_close):
-        return True
+        return False
 
     return False
         
-    
-        
-
 def get_valid_tickers(d):
     valid_tickers = []
     for ticker in d:
@@ -104,11 +101,8 @@ def get_valid_tickers(d):
     return valid_tickers
             
     
-
-
-
 d = readfile("sampledata/WIKI_PRICES_010158fe7c92b40ebea4a642c5d0b158.csv")
-print(get_valid_tickers(d))
+print(is_valid(d, "ABMD"))
 
 
 
